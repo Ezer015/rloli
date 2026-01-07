@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "rlolicon",
+      "name": "rloli",
       "dependencies": {
         "@elysiajs/openapi": "^1.4.13",
         "elysia": "latest",

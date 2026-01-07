@@ -1,15 +1,44 @@
-# Elysia with Bun runtime
+# Rloli
 
-## Getting Started
-To get started with this template, simply paste this command into your terminal:
-```bash
-bun create elysia ./elysia-example
-```
+A proxy for the [Lolicon](https://docs.api.lolicon.app/#/) API.
+
+## Features
+
+- **Random Image Proxy**: Fetch random pixiv IDs via Lolicon API.
+- **Size Selection**: Support for multiple image sizes (`original`, `regular`, `small`, `thumb`, `mini`).
+- **Aspect Ratio Filtering**: Filter images based on aspect ratio patterns (e.g., `gt1`, `lt1`).
+- **Convenience Endpoints**: Quick access to horizontal (`/h`) and vertical (`/v`) images.
+
+## Endpoints
+
+### `GET /`
+
+The main endpoint to fetch a random image. Redirects to the proxied image URL.
+
+**Query Parameters:**
+
+- `size`: The image size. One of `original`, `regular`, `small`, `thumb`, `mini`. Default: `original`.
+- `aspectRatio`: A pattern to filter by aspect ratio. Format: `((gt|gte|lt|lte|eq)[\d.]+){1,2}`. Example: `gt1.7lt1.8`.
+
+### `GET /h`
+
+Alias for `/?aspectRatio=gt1`. Redirects to a horizontal image.
+
+### `GET /v`
+
+Alias for `/?aspectRatio=lt1`. Redirects to a vertical image.
 
 ## Development
-To start the development server run:
+
+To start the development server:
+
 ```bash
+bun install
 bun run dev
 ```
 
-Open http://localhost:3000/ with your browser to see the result.
+The server will run at `http://localhost:3000`.
+
+## License
+
+This project is licensed under the [MIT](./LICENSE) open source license.
