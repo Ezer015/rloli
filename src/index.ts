@@ -5,7 +5,7 @@ const apiHost = "api.lolicon.app"
 const endPoint = "/setu/v2"
 const proxy = "i.yuki.sh"
 
-const app = new Elysia()
+export default new Elysia()
     .use(openapi())
     .get("/", async ({ query, status, redirect }) => {
         const url = new URL(endPoint, `https://${apiHost}`);
@@ -48,5 +48,3 @@ const app = new Elysia()
     .get("/h", ({ redirect }) => redirect("/?aspectRatio=gt1"))
     .get("/v", ({ redirect }) => redirect("/?aspectRatio=lt1"))
     .listen(3000)
-
-console.log(`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`)
