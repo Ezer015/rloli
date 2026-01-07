@@ -27,10 +27,8 @@ export default new Elysia()
         if (typeof imageUrl !== "string") {
             return status(502, `No image URL found for size: ${query.size}`)
         }
+        return redirect(imageUrl)
 
-        const proxyUrl = new URL(imageUrl)
-        proxyUrl.host = proxy
-        return redirect(proxyUrl.toString())
     }, {
         query: t.Object({
             size: t.Union([
@@ -43,6 +41,7 @@ export default new Elysia()
             aspectRatio: t.Optional(
                 t.String({ pattern: "^((gt|gte|lt|lte|eq)[\\d.]+){1,2}$" }),
             ),
+            proxy: t.String({ default: proxy }),
         })
     })
     .get("/h", ({ redirect }) => redirect("/?aspectRatio=gt1"))

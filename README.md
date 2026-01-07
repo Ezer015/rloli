@@ -1,6 +1,6 @@
 # Rloli
 
-A proxy for the [Lolicon](https://docs.api.lolicon.app/#/) API.
+A proxy for the [Lolicon API](https://api.lolicon.app/).
 
 ## Features
 
@@ -19,6 +19,7 @@ The main endpoint to fetch a random image. Redirects to the proxied image URL.
 
 - `size`: The image size. One of `original`, `regular`, `small`, `thumb`, `mini`. Default: `original`.
 - `aspectRatio`: A pattern to filter by aspect ratio. Format: `((gt|gte|lt|lte|eq)[\d.]+){1,2}`. Example: `gt1.7lt1.8`.
+- `proxy`: The proxy domain to use. Default: `i.yuki.sh`.
 
 ### `GET /h`
 
