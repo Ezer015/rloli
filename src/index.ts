@@ -11,6 +11,7 @@ const proxyApi = "i.yuki.sh"
 
 export default new Elysia()
     .use(openapi())
+    .get("/static", () => Bun.file("./static/index.html"))
     .get("/", async ({ query, status, redirect }) => {
         const url = new URL(imgEndPoint, `https://${loliconApi}`)
         url.search = new URLSearchParams(
@@ -120,4 +121,3 @@ export default new Elysia()
             proxy: t.String({ default: proxyApi }),
         })
     })
-    
