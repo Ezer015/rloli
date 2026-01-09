@@ -5,285 +5,174 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>Roll LOLI</title>
+
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #050505;
-            --txt: #ededed;
-            --dim: #666;
-            --acc: #fff;
-            --glass: rgba(20, 20, 20, 0.6);
-            --border: rgba(255, 255, 255, 0.08);
-            --bez: cubic-bezier(.23, 1, .32, 1);
-        }
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        txt: '#ededed',
+                        dim: '#666',
+                        acc: '#fff',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'spin-slow': 'spin 2s linear infinite',
+                        'dash': 'dash 1.5s ease-in-out infinite',
+                        'rotate-once': 'spin 0.6s cubic-bezier(.23, 1, .32, 1)',
+                    },
+                    keyframes: {
+                        dash: {
+                            '0%': { strokeDasharray: '1, 150', strokeDashoffset: '0' },
+                            '50%': { strokeDasharray: '90, 150', strokeDashoffset: '-35' },
+                            '100%': { strokeDasharray: '90, 150', strokeDashoffset: '-124' },
+                        }
+                    }
+                }
+            }
         }
-
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .glass {
+                @apply bg-[rgba(20,20,20,0.6)] border border-white/10 backdrop-blur-xl;
+            }
+            .ease-custom {
+                transition-timing-function: cubic-bezier(.23, 1, .32, 1);
+            }
+        }
         body {
-            margin: 0;
-            height: 100vh;
-            overflow: hidden;
-            background: radial-gradient(circle at 50% 0, #1a1a1a, var(--bg) 70%);
-            color: var(--txt);
-            font-family: 'Inter', sans-serif;
-            display: grid;
-            place-items: center;
-        }
-
-        h1 {
-            position: fixed;
-            top: 24px;
-            left: 28px;
-            margin: 0;
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            background: linear-gradient(to bottom right, #fff, var(--dim));
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            z-index: 9;
-            pointer-events: none;
-        }
-
-        .nav {
-            position: fixed;
-            top: 24px;
-            z-index: 10;
-            display: flex;
-            gap: 4px;
-            padding: 4px;
-            background: var(--glass);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            backdrop-filter: blur(12px);
-        }
-
-        .btn {
-            width: 44px;
-            height: 36px;
-            border: 0;
-            background: 0 0;
-            color: var(--dim);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: .3s var(--bez);
-            display: grid;
-            place-items: center;
-        }
-
-        .btn:hover {
-            color: var(--txt);
-            background: rgba(255, 255, 255, .05);
-        }
-
-        .btn.active {
-            background: rgba(255, 255, 255, .12);
-            color: var(--acc);
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .icon {
-            width: 20px;
-            height: 20px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 1.5;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .stage {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: grid;
-            place-items: center;
-        }
-
-        img {
-            max-width: 88vw;
-            max-height: 68vh;
-            border-radius: 12px;
-            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, .8);
-            transition: .6s var(--bez);
-        }
-
-        .loading img {
-            opacity: 0;
-            transform: scale(.95) translateY(10px);
-            filter: blur(20px);
-        }
-
-        .spin {
-            position: absolute;
-            width: 64px;
-            height: 64px;
-            z-index: 5;
-            opacity: 0;
-            transition: .3s;
-            pointer-events: none;
-            animation: rot 2s linear infinite;
-        }
-
-        .loading .spin {
-            opacity: 1;
-        }
-
-        .spin circle {
-            fill: none;
-            stroke-width: 3;
-            stroke-linecap: round;
-        }
-
-        .trk {
-            stroke: rgba(255, 255, 255, .08);
-        }
-
-        .crc {
-            stroke: var(--acc);
-            animation: dash 1.5s ease-in-out infinite;
-        }
-
-        .fab {
-            position: fixed;
-            bottom: 48px;
-            z-index: 20;
-            width: 72px;
-            height: 72px;
-            border-radius: 24px;
-            border: 1px solid var(--border);
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            color: var(--acc);
-            cursor: pointer;
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
-            transition: .3s var(--bez);
-            display: grid;
-            place-items: center;
-        }
-
-        .fab:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05), 0 20px 40px -10px rgba(0, 0, 0, 0.6);
-            transform: translateY(-4px);
-        }
-
-        .fab:active {
-            transform: scale(.94);
-        }
-
-        .fab svg {
-            width: 32px;
-            height: 32px;
-            stroke-width: 1.5;
-        }
-
-        .fab.rot svg {
-            animation: rot .6s var(--bez);
-        }
-
-        @keyframes rot {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        @keyframes dash {
-            0% {
-                stroke-dasharray: 1, 150;
-                stroke-dashoffset: 0;
-            }
-
-            50% {
-                stroke-dasharray: 90, 150;
-                stroke-dashoffset: -35;
-            }
-
-            100% {
-                stroke-dasharray: 90, 150;
-                stroke-dashoffset: -124;
-            }
+            background: radial-gradient(circle at 50% 0, #1a1a1a, #050505 70%);
         }
     </style>
+
+    <!-- Import Map -->
+    <script type="importmap">
+    {
+        "imports": {
+            "react": "https://esm.sh/react@18.2.0",
+            "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+            "lucide-react": "https://esm.sh/lucide-react@0.263.1"
+        }
+    }
+    </script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 
-<body>
-    <h1>Roll LOLI</h1>
+<body class="m-0 h-screen overflow-hidden text-txt font-sans">
 
-    <nav class="nav" id="nav">
-        <button class="btn active" data-m="/">
-            <svg class="icon" viewBox="0 0 24 24">
-                <rect width="18" height="14" x="3" y="3" rx="2" />
-                <path d="M4 21h1M9 21h1M14 21h1M19 21h1" />
+    <div id="root" class="w-full h-full"></div>
+
+    <script type="text/babel" data-type="module">
+        import React, { useState, useEffect, useCallback } from 'react';
+        import { createRoot } from 'react-dom/client';
+        import {
+            LayoutGrid, RectangleHorizontal, RectangleVertical,
+            Dice1, Dice2, Dice3, Dice4, Dice5, Dice6
+        } from 'lucide-react';
+
+        const Spinner = () => (
+            <svg className="absolute w-16 h-16 animate-spin-slow pointer-events-none z-[5]" viewBox="0 0 50 50">
+                <circle className="stroke-white/10 fill-none stroke-[3]" cx="25" cy="25" r="20" strokeLinecap="round" />
+                <circle className="stroke-acc fill-none stroke-[3] animate-dash" cx="25" cy="25" r="20" strokeLinecap="round" />
             </svg>
-        </button>
-        <button class="btn" data-m="/h">
-            <svg class="icon" viewBox="0 0 24 24">
-                <path d="M3 2h18M3 22h18" />
-                <rect width="18" height="12" x="3" y="6" rx="2" />
-            </svg>
-        </button>
-        <button class="btn" data-m="/v">
-            <svg class="icon" viewBox="0 0 24 24">
-                <path d="M2 3v18M22 3v18" />
-                <rect width="12" height="18" x="6" y="3" rx="2" />
-            </svg>
-        </button>
-    </nav>
+        );
 
-    <div class="stage" id="stage">
-        <svg class="spin" viewBox="0 0 50 50">
-            <circle class="trk" cx="25" cy="25" r="20" />
-            <circle class="crc" cx="25" cy="25" r="20" />
-        </svg>
-        <img id="img" alt="">
-    </div>
+        const DICE_ICONS = [Dice1, Dice2, Dice3, Dice4, Dice5, Dice6];
 
-    <button class="fab" id="btn" aria-label="Roll">
-        <svg class="icon" viewBox="0 0 24 24" style="stroke-width:1.8">
-            <rect width="18" height="18" x="3" y="3" rx="4" ry="4" />
-            <path id="pts" d="" />
-        </svg>
-    </button>
+        const App = () => {
+            const [mode, setMode] = useState('/');
+            const [imgSrc, setImgSrc] = useState('');
+            const [loading, setLoading] = useState(true);
+            const [diceIndex, setDiceIndex] = useState(0);
+            const [isFabRotating, setIsFabRotating] = useState(false);
 
-    <script>
-        const $ = s => document.querySelector(s);
-        const stg = $('#stage'), img = $('#img'), btn = $('#btn'), pts = $('#pts');
-        let mode = '/', timer;
-        const dots = ['M12 12h.01', 'M15 9h.01M9 15h.01', 'M16 8h.01M12 12h.01M8 16h.01', 'M16 8h.01M8 8h.01M8 16h.01M16 16h.01', 'M16 8h.01M8 8h.01M8 16h.01M16 16h.01M12 12h.01', 'M16 8h.01M16 12h.01M16 16h.01M8 8h.01M8 12h.01M8 16h.01'];
+            const loadNewImage = useCallback((currentMode) => {
+                setLoading(true);
+                setIsFabRotating(true);
+                setDiceIndex(Math.floor(Math.random() * 6));
 
-        $('#nav').onclick = e => {
-            const b = e.target.closest('.btn');
-            if (!b || b.dataset.m === mode) return;
-            $('.active').classList.remove('active');
-            b.classList.add('active');
-            mode = b.dataset.m;
-            load();
-        };
+                const url = `${currentMode === '/' ? '' : currentMode}/?t=${Date.now()}`;
+                const tmp = new Image();
 
-        const load = () => {
-            clearTimeout(timer);
-            const toggle = on => {
-                stg.classList.toggle('loading', on);
-                btn.classList.toggle('rot', on);
-                btn.disabled = on;
+                tmp.onload = () => {
+                    setImgSrc(url);
+                    setTimeout(() => {
+                        setLoading(false);
+                        setIsFabRotating(false);
+                    }, 50);
+                };
+                tmp.onerror = () => setTimeout(() => loadNewImage(currentMode), 1000);
+                tmp.src = url;
+            }, []);
+
+            useEffect(() => { loadNewImage(mode); }, []);
+
+            const handleModeChange = (newMode) => {
+                if (newMode === mode) return;
+                setMode(newMode);
+                loadNewImage(newMode);
             };
-            toggle(true);
-            pts.setAttribute('d', dots[Math.random() * 6 | 0]);
 
-            const tmp = new Image();
-            const url = `${mode === '/' ? '' : mode}/?t=${Date.now()}`;
-            tmp.onload = () => { img.src = url; setTimeout(() => toggle(false), 50); };
-            tmp.onerror = () => timer = setTimeout(load, 1000);
-            tmp.src = url;
+            const CurrentDiceIcon = DICE_ICONS[diceIndex];
+
+            return (
+                <div className="w-full h-full relative flex items-center justify-center">
+
+                    <h1 className="fixed top-6 left-7 m-0 text-2xl font-extrabold -tracking-[0.03em] bg-gradient-to-br from-white to-dim bg-clip-text text-transparent z-[9] pointer-events-none select-none">
+                        <span className="sm:hidden">RLOLI</span>
+                        <span className="hidden sm:inline">Roll LOLI</span>
+                    </h1>
+
+                    <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-10 flex gap-1 p-1 glass rounded-xl transition-all">
+                        {[{ m: '/', icon: LayoutGrid }, { m: '/h', icon: RectangleHorizontal }, { m: '/v', icon: RectangleVertical }].map((btn) => {
+                            const IconComp = btn.icon;
+                            return (
+                                <button
+                                    key={btn.m}
+                                    onClick={() => handleModeChange(btn.m)}
+                                    className={`w-11 h-9 border-0 rounded-lg cursor-pointer transition-all duration-300 ease-custom grid place-items-center ${mode === btn.m ? 'bg-white/10 text-acc shadow-[0_0_10px_rgba(0,0,0,0.2)]' : 'bg-transparent text-dim hover:text-txt hover:bg-white/5'
+                                        }`}
+                                >
+                                    <IconComp size={20} strokeWidth={1.5} />
+                                </button>
+                            );
+                        })}
+                    </nav>
+
+                    <div className="relative w-full h-full grid place-items-center">
+                        {loading && <Spinner />}
+                        {imgSrc && (
+                            <img
+                                src={imgSrc}
+                                alt="Random"
+                                className={`max-w-[88vw] max-h-[68vh] rounded-xl shadow-[0_30px_60px_-12px_rgba(0,0,0,0.8)] transition-all duration-600 ease-custom object-contain ${loading ? 'opacity-0 scale-95 translate-y-[10px] blur-[20px]' : 'opacity-100 scale-100 translate-y-0 blur-0'}`}
+                            />
+                        )}
+                    </div>
+
+                    <button
+                        onClick={() => loadNewImage(mode)}
+                        disabled={loading}
+                        className="fixed bottom-6 sm:bottom-12 z-20 w-[72px] h-[72px] rounded-3xl glass text-acc cursor-pointer shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] transition-all duration-300 ease-custom grid place-items-center hover:bg-white/10 hover:border-white/30 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(255,255,255,0.05),0_20px_40px_-10px_rgba(0,0,0,0.6)] active:scale-95 disabled:opacity-80 disabled:cursor-not-allowed"
+                    >
+                        <div className={isFabRotating ? 'animate-rotate-once' : ''}>
+                            <CurrentDiceIcon size={32} strokeWidth={1.8} />
+                        </div>
+                    </button>
+                </div>
+            );
         };
-        btn.onclick = load;
-        load();
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 
