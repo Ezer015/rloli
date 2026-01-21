@@ -1,4 +1,4 @@
-import { Elysia, t } from "elysia"
+import { Elysia, t, file } from "elysia"
 import { openapi } from '@elysiajs/openapi'
 import { join } from 'path'
 
@@ -12,7 +12,7 @@ const proxyApi = "i.yuki.sh"
 
 export default new Elysia()
     .use(openapi())
-    .get("/static", () => Bun.file(join(process.cwd(), 'static', 'index.html')))
+    .get("/static", () => file(join(process.cwd(), 'static', 'index.html')))
     .get("/", async ({ query, status, redirect }) => {
         const url = new URL(imgEndPoint, `https://${loliconApi}`)
         url.search = new URLSearchParams(
